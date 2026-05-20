@@ -1,0 +1,12 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install only what the demo driver needs (requests for HTTP calls)
+RUN pip install --no-cache-dir requests
+
+# Copy the demo driver and shared constants
+COPY demo/ demo/
+COPY shared/ shared/
+
+CMD ["python", "-m", "demo.driver"]

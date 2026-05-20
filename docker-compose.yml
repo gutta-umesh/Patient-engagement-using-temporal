@@ -1,0 +1,155 @@
+services:
+  # ─── Infrastructure ────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: temporal
+      POSTGRES_PASSWORD: temporal
+      POSTGRES_DB: temporal
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U temporal"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  temporal:
+    image: temporalio/auto-setup:latest
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DB=postgres12
+      - DB_PORT=5432
+      - POSTGRES_USER=temporal
+      - POSTGRES_PWD=temporal
+      - POSTGRES_SEEDS=postgres
+    ports:
+      - "7233:7233"
+    healthcheck:
+      test: ["CMD", "tctl", "--address", "temporal:7233", "cluster", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+  temporal-ui:
+    image: temporalio/ui:latest
+    depends_on:
+      temporal:
+        condition: service_healthy
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+      - TEMPORAL_CORS_ORIGINS=http://localhost:3000
+      - TEMPORAL_CSRF_COOKIE_INSECURE=true
+    ports:
+      - "8233:8080"
+
+  # ─── Mock Services ─────────────────────────────────────────────────────────
+  mock-twilio:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.mocks
+    environment:
+      MOCK_SERVICE: twilio_server
+      MOCK_PORT: 8090
+    ports:
+      - "8090:8090"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8090/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  mock-fhir:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.mocks
+    environment:
+      MOCK_SERVICE: fhir_server
+      MOCK_PORT: 8091
+    ports:
+      - "8091:8091"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8091/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ─── Application Services ──────────────────────────────────────────────────
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.worker
+    depends_on:
+      temporal:
+        condition: service_healthy
+      mock-twilio:
+        condition: service_healthy
+      mock-fhir:
+        condition: service_healthy
+    environment:
+      TEMPORAL_HOST: temporal:7233
+      TWILIO_URL: http://mock-twilio:8090
+      FHIR_URL: http://mock-fhir:8091
+      DEMO_MODE: "true"
+      DEMO_TIMER_SECONDS: "2"
+      SURVEY_TIMEOUT_SECONDS: "60"
+      SMTP_SERVER: "smtp.gmail.com"
+      SMTP_PORT: "587"
+      SMTP_USERNAME: "guttaumesh123@gmail.com"
+      SMTP_PASSWORD: "siki hqjx aqhb kphj"
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.api
+    depends_on:
+      temporal:
+        condition: service_healthy
+    environment:
+      TEMPORAL_HOST: temporal:7233
+      TWILIO_URL: http://mock-twilio:8090
+      FHIR_URL: http://mock-fhir:8091
+      DEMO_MODE: "true"
+      DEMO_TIMER_SECONDS: "2"
+      SURVEY_TIMEOUT_SECONDS: "60"
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ─── Frontend Dashboard ────────────────────────────────────────────────────
+  frontend:
+    build: ./frontend
+    depends_on:
+      - api
+    ports:
+      - "3000:80"
+
+
+
+  # ─── Demo Driver (optional — use --profile demo) ──────────────────────────
+  demo-driver:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.demo
+    profiles:
+      - demo
+    depends_on:
+      api:
+        condition: service_healthy
+      worker:
+        condition: service_started
+    environment:
+      API_URL: http://api:8080
+      DEMO_TIMER_SECONDS: "2"
+
+volumes:
+  postgres_data:

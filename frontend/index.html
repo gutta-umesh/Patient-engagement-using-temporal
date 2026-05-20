@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CareFlow — Post-Discharge Patient Monitoring Platform">
+    <title>CareFlow | Clinical Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css?v=4">
+</head>
+<body>
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <span class="brand-name">CareFlow</span>
+        </div>
+        <nav class="sidebar-nav" style="display:flex; flex-direction:column; height:calc(100% - 90px);">
+            <a href="#" class="nav-item active" id="nav-enroll" onclick="showSection('enroll')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                <span>+ Enroll Patient</span>
+            </a>
+            <a href="#" class="nav-item" id="nav-patients" onclick="showSection('patients')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span>Patients</span>
+            </a>
+            <a href="#" class="nav-item" id="nav-dashboard" onclick="showSection('dashboard')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                <span>Dashboard</span>
+            </a>
+            
+            <!-- Clear Button at bottom of sidebar -->
+            <a href="#" class="nav-item" style="margin-top: auto; color: #ff5e5e; border-color: rgba(255, 94, 94, 0.15);" onclick="clearAllData()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                <span>Clear All Data</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-avatar">GU</div>
+            <div class="user-info">
+                <span class="user-name">Gutta Umesh Sai</span>
+                <span class="user-role">Care Coordinator</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="main-wrapper">
+        <!-- HEADER / TOP BAR -->
+        <header class="topbar" id="topbar">
+            <div class="topbar-left">
+                <h2 class="page-title">Patient Journey Control Center</h2>
+                <span class="breadcrumb">Dashboard / Post-Discharge Monitoring</span>
+            </div>
+            <div class="topbar-right">
+                <div class="search-box">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" placeholder="Search patients or MRNs..." id="search-input">
+                </div>
+                <button class="icon-btn" id="btn-notifications">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <span class="notification-dot"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- ENROLLMENT PAGE (Shown when no patient is active) -->
+        <section class="enroll-section" id="enroll-section">
+            <div class="enroll-card">
+                <div class="enroll-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                </div>
+                <h3>Enroll New Patient</h3>
+                <p>Launch an orchestration monitoring pipeline. The system executes automated symptom check-ins at Day 1, 7, 30, and 90, performing risk routing and EHR logging in real-time.</p>
+                
+                <!-- Quick Presets -->
+                <div style="margin-bottom: 24px; text-align: left;">
+                    <label style="display:block; font-size:0.75rem; font-weight:700; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.05em;">Simulation Presets</label>
+                    <div style="display:flex; gap: 8px; flex-wrap:wrap;">
+                        <button class="btn btn-ghost btn-sm" onclick="applyPreset('Jane Doe', 'P-1001', 'jane@example.com', 'Post-Surgical Recovery')">Low Risk Patient</button>
+                        <button class="btn btn-ghost btn-sm" onclick="applyPreset('Robert Miller', 'P-1002', 'robert@example.com', 'Cardiothoracic Discharge')">Moderate Risk Patient</button>
+                        <button class="btn btn-ghost btn-sm" onclick="applyPreset('Eleanor Vance', 'P-1003', 'eleanor@example.com', 'High Risk Recovery')">Crisis/High Risk Patient</button>
+                        <button class="btn btn-ghost btn-sm" onclick="applyPreset('Marcus Aurelius', 'P-1004', 'marcus@example.com', 'General Observation')">Silent Patient (Timeout)</button>
+                    </div>
+                </div>
+
+                <div class="enroll-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="enroll-name">Patient Name</label>
+                            <input type="text" id="enroll-name" value="" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="enroll-id">Patient ID / MRN</label>
+                            <input type="text" id="enroll-id" value="" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="enroll-phone">Email Address (Email Target)</label>
+                            <input type="text" id="enroll-phone" value="" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="enroll-diagnosis">Primary Diagnosis</label>
+                            <input type="text" id="enroll-diagnosis" value="" placeholder="">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-lg" id="btn-enroll" onclick="handleEnroll()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        Begin Automated Monitoring
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PATIENTS SECTION (Active + Roster + Add New) -->
+        <section class="enroll-section" id="patients-section" style="display:none; max-width: 900px; margin: 0 auto; width: 100%; padding: 40px 20px; flex-direction: column; gap: 24px;">
+            <!-- Active Enrolled Patients -->
+            <div class="enroll-card" style="max-width: 100%; text-align: left; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 32px; width: 100%; box-sizing: border-box;">
+                <h3 style="margin-bottom: 8px; font-size: 1.4rem; color: var(--text-primary);">Active Enrolled Patients</h3>
+                <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 0.9rem;">The following patients are currently being tracked under an active monitoring pipeline. Click any patient to load their live timeline and telemetry dashboard.</p>
+                
+                <div id="active-patients-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <!-- Dynamically populated -->
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 30px; border: 1px dashed rgba(255,255,255,0.08); border-radius: 12px; color: var(--text-secondary); background: rgba(255,255,255,0.01);">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:12px; opacity:0.6;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        <p style="font-size:0.9rem; font-weight:500;">No active patients under automated monitoring.</p>
+                        <p style="font-size:0.8rem; color: var(--text-muted); margin-top: 4px;">Choose a template from the roster below or add a new patient!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clinical Presets Roster -->
+            <div class="enroll-card" style="max-width: 100%; text-align: left; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 32px; width: 100%; box-sizing: border-box;">
+                <h3 style="margin-bottom: 8px; font-size: 1.2rem; color: var(--text-primary);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -4px; margin-right: 8px; color: var(--accent);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    Clinical Simulation Presets
+                </h3>
+                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.85rem;">Quick-start templates — click any preset to instantly enroll a patient into the monitoring pipeline.</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;" id="preset-roster">
+                    <div class="preset-card" onclick="quickEnrollPreset('Jane Doe', 'P-1001', 'jane@example.com', 'Post-Surgical Recovery')" style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <span style="font-weight:700; color:var(--text);">Jane Doe</span>
+                            <span style="font-size:0.65rem; font-weight:700; padding:2px 8px; border-radius:12px; background:rgba(16,185,129,0.12); color:var(--success); border:1px solid rgba(16,185,129,0.2);">LOW RISK</span>
+                        </div>
+                        <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:4px;">Post-Surgical Recovery</p>
+                        <p style="font-size:0.72rem; color:var(--text-muted);">jane@example.com</p>
+                    </div>
+                    <div class="preset-card" onclick="quickEnrollPreset('Robert Miller', 'P-1002', 'robert@example.com', 'Cardiothoracic Discharge')" style="background: rgba(245, 158, 11, 0.04); border: 1px solid rgba(245, 158, 11, 0.15); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <span style="font-weight:700; color:var(--text);">Robert Miller</span>
+                            <span style="font-size:0.65rem; font-weight:700; padding:2px 8px; border-radius:12px; background:rgba(245,158,11,0.12); color:var(--warning); border:1px solid rgba(245,158,11,0.2);">MODERATE</span>
+                        </div>
+                        <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:4px;">Cardiothoracic Discharge</p>
+                        <p style="font-size:0.72rem; color:var(--text-muted);">robert@example.com</p>
+                    </div>
+                    <div class="preset-card" onclick="quickEnrollPreset('Eleanor Vance', 'P-1003', 'eleanor@example.com', 'High Risk Recovery')" style="background: rgba(239, 68, 68, 0.04); border: 1px solid rgba(239, 68, 68, 0.15); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <span style="font-weight:700; color:var(--text);">Eleanor Vance</span>
+                            <span style="font-size:0.65rem; font-weight:700; padding:2px 8px; border-radius:12px; background:rgba(239,68,68,0.12); color:var(--danger); border:1px solid rgba(239,68,68,0.2);">HIGH RISK</span>
+                        </div>
+                        <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:4px;">High Risk Recovery</p>
+                        <p style="font-size:0.72rem; color:var(--text-muted);">eleanor@example.com</p>
+                    </div>
+                    <div class="preset-card" onclick="quickEnrollPreset('Marcus Aurelius', 'P-1004', 'marcus@example.com', 'General Observation')" style="background: rgba(100, 116, 139, 0.04); border: 1px solid rgba(100, 116, 139, 0.15); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <span style="font-weight:700; color:var(--text);">Marcus Aurelius</span>
+                            <span style="font-size:0.65rem; font-weight:700; padding:2px 8px; border-radius:12px; background:rgba(100,116,139,0.12); color:var(--text-secondary); border:1px solid rgba(100,116,139,0.2);">TIMEOUT SIM</span>
+                        </div>
+                        <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:4px;">General Observation</p>
+                        <p style="font-size:0.72rem; color:var(--text-muted);">marcus@example.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add New Custom Patient -->
+            <div class="enroll-card" style="max-width: 100%; text-align: left; background: var(--bg-card); border: 1px solid rgba(94, 126, 255, 0.15); border-radius: 16px; padding: 32px; width: 100%; box-sizing: border-box;">
+                <h3 style="margin-bottom: 8px; font-size: 1.2rem; color: var(--text-primary);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -4px; margin-right: 8px; color: var(--accent);"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                    Add New Patient
+                </h3>
+                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.85rem;">Enroll a custom patient directly into the automated post-discharge monitoring pipeline.</p>
+                
+                <div class="enroll-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="new-patient-name">Patient Name</label>
+                            <input type="text" id="new-patient-name" placeholder="e.g., John Smith">
+                        </div>
+                        <div class="form-group">
+                            <label for="new-patient-id">Patient ID / MRN</label>
+                            <input type="text" id="new-patient-id" placeholder="e.g., P-2001 (auto-generated if empty)">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="new-patient-email">Email Address</label>
+                            <input type="text" id="new-patient-email" placeholder="e.g., john@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="new-patient-diagnosis">Primary Diagnosis</label>
+                            <input type="text" id="new-patient-diagnosis" placeholder="e.g., Post-Cardiac Surgery">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-lg" id="btn-add-patient" onclick="addNewPatient()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        Enroll & Start Monitoring
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD GRID (Shown when a patient is actively enrolled) -->
+        <div class="dashboard-grid" id="dashboard-grid" style="display:none;">
+            
+            <!-- LEFT MAIN MONITORING COLUMN -->
+            <div class="main-column">
+                <!-- ACTIVE PATIENT SUMMARY CARD -->
+                <section class="patient-card" id="patient-card" style="display:none;">
+                    <div class="patient-header">
+                        <div class="patient-avatar" id="patient-avatar">JD</div>
+                        <div class="patient-details">
+                            <h3 class="patient-name" id="patient-name-display">Jane Doe</h3>
+                            <div class="patient-meta">
+                                <span class="meta-item"><strong>MRN:</strong> <span id="mrn-display">P-1001</span></span>
+                                <span class="meta-divider">•</span>
+                                <span class="meta-item"><strong>DOB:</strong> 03/15/1981 (45F)</span>
+                                <span class="meta-divider">•</span>
+                                <span class="meta-item"><strong>Status:</strong> Active</span>
+                            </div>
+                        </div>
+                        <div class="patient-status-group">
+                            <div class="status-chip" id="journey-status">
+                                <span class="status-dot"></span>
+                                <span id="status-text">Monitoring Active</span>
+                            </div>
+                            <div class="patient-tags">
+                                <span class="tag tag-diagnosis" id="diagnosis-tag">Post-Surgical Recovery</span>
+                                <span class="tag tag-allergy">Penicillin Allergy</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="patient-stats">
+                        <div class="stat-item">
+                            <span class="stat-value" id="discharge-date-display">May 19, 2026</span>
+                            <span class="stat-label">Discharge Date</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="current-day-display">—</span>
+                            <span class="stat-label">Active Stage</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="completed-count">0 / 4</span>
+                            <span class="stat-label">Check-ins Completed</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="risk-display">—</span>
+                            <span class="stat-label">Risk Level</span>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- CARE STEP MAP (TIMELINE) -->
+                <section class="card timeline-card" id="timeline-card">
+                    <div class="card-header">
+                        <h3>Automated Monitoring Pipeline Timeline</h3>
+                        <span class="card-badge">Parent: PatientJourneyWorkflow</span>
+                    </div>
+                    <div class="timeline" id="timeline">
+                        <div class="tl-item" id="timeline-day-1" data-day="1">
+                            <div class="tl-connector"></div>
+                            <div class="tl-node pending"><span class="tl-dot"></span></div>
+                            <div class="tl-body">
+                                <div class="tl-title">Day 1 — Post-Discharge Initial Review</div>
+                                <div class="tl-desc">Initial survey check-in focused on acute post-operative issues and pain management stability.</div>
+                                <div class="tl-result" id="result-day-1"></div>
+                            </div>
+                        </div>
+                        <div class="tl-item" id="timeline-day-7" data-day="7">
+                            <div class="tl-connector"></div>
+                            <div class="tl-node pending"><span class="tl-dot"></span></div>
+                            <div class="tl-body">
+                                <div class="tl-title">Day 7 — Subacute Recovery Progress</div>
+                                <div class="tl-desc">Progress assessment checking medication adherence, fatigue thresholds, and early outpatient recovery milestones.</div>
+                                <div class="tl-result" id="result-day-7"></div>
+                            </div>
+                        </div>
+                        <div class="tl-item" id="timeline-day-30" data-day="30">
+                            <div class="tl-connector"></div>
+                            <div class="tl-node pending"><span class="tl-dot"></span></div>
+                            <div class="tl-body">
+                                <div class="tl-title">Day 30 — Monthly Stabilization Milestone</div>
+                                <div class="tl-desc">Monthly check-in focusing on sleep quality, long-term functional recovery, and secondary symptom tracking.</div>
+                                <div class="tl-result" id="result-day-30"></div>
+                            </div>
+                        </div>
+                        <div class="tl-item" id="timeline-day-90" data-day="90">
+                            <div class="tl-connector"></div>
+                            <div class="tl-node pending"><span class="tl-dot"></span></div>
+                            <div class="tl-body">
+                                <div class="tl-title">Day 90 — Final Care Protocol Assessment</div>
+                                <div class="tl-desc">Final follow-up to clear the patient from active orchestration pipeline and transition them to outpatient care.</div>
+                                <div class="tl-result" id="result-day-90"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- RISK STRATIFICATION FLOWCHART -->
+                <div id="pathway-flow-container" style="display:none; margin-top:24px;">
+                    <section class="card pathway-card">
+                        <div class="card-header">
+                            <h3>Risk Stratification Care Pathway Protocols</h3>
+                            <span class="card-badge">AI Symptom Score Routing</span>
+                        </div>
+                        <div class="pathway-list">
+                            <div class="pathway-item" id="route-low" data-route="low">
+                                <div class="pw-indicator pw-low"></div>
+                                <div class="pw-body">
+                                    <div class="pw-title">Wellness Protocol <span class="pw-range">(Score 0-1)</span></div>
+                                    <div class="pw-action">Workflows triggers mock activity to deliver recovery and physical self-care guidelines.</div>
+                                </div>
+                                <div class="pw-badge" style="display:none;">ACTIVE</div>
+                            </div>
+                            <div class="pathway-item" id="route-moderate" data-route="moderate">
+                                <div class="pw-indicator pw-moderate"></div>
+                                <div class="pw-body">
+                                    <div class="pw-title">Callback Schedule <span class="pw-range">(Score 2)</span></div>
+                                    <div class="pw-action">Workflow automatically generates an actionable task for a Nurse Callback within 24 hours.</div>
+                                </div>
+                                <div class="pw-badge" style="display:none;">ACTIVE</div>
+                            </div>
+                            <div class="pathway-item" id="route-high" data-route="high">
+                                <div class="pw-indicator pw-high"></div>
+                                <div class="pw-body">
+                                    <div class="pw-title">Critical Intervention <span class="pw-range">(Score 3+)</span></div>
+                                    <div class="pw-action">Workflow triggers immediate care-coordinator escalation alert and page.</div>
+                                </div>
+                                <div class="pw-badge" style="display:none;">ACTIVE</div>
+                            </div>
+                            <div class="pathway-item" id="route-timeout" data-route="timeout">
+                                <div class="pw-indicator pw-timeout"></div>
+                                <div class="pw-body">
+                                    <div class="pw-title">Non-Responsive Protocol <span class="pw-range">(No reply)</span></div>
+                                    <div class="pw-action">Survey timer finishes without receiving response signal. Flags non-responsive alert.</div>
+                                </div>
+                                <div class="pw-badge" style="display:none;">ACTIVE</div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COL: CONTROLS & MOBILE SIMULATOR -->
+            <div class="control-sidebar" style="display: flex; flex-direction: column; height: 100%;">
+                
+                <!-- PATIENT SMS SIMULATOR (Merged Clinical Form) -->
+                <section class="card" style="padding: 16px 20px; display: flex; flex-direction: column; flex-grow: 1;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <h3 style="font-size: 0.95rem; font-weight: 700;">Patient SMS Client</h3>
+                        <div class="countdown" id="countdown" style="display:none; font-size: 0.75rem;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 4px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span id="countdown-value">--</span>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">Visualizes incoming SMS and simulated responses.</p>
+                    
+                    <div class="sim-phone" style="flex-grow: 1; display: flex; flex-direction: column; min-height: 400px;">
+                        <div class="phone-screen" style="flex-grow: 1; display: flex; flex-direction: column;">
+                            <div class="phone-header">
+                                <span>16:44</span>
+                                <span>Messages 💬</span>
+                            </div>
+                            
+                            <!-- Waiting Screen -->
+                            <div class="assessment-waiting" id="waiting-state" style="padding: 20px 10px;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
+                                <p id="waiting-message" style="font-size: 0.8rem;">Waiting for next check-in window...</p>
+                            </div>
+
+
+
+                            <!-- Phone Messages Stream -->
+                            <div id="phone-messages" style="display:flex; flex-direction:column; gap:10px; overflow-y:auto; flex:1; min-height:0; height:100%; padding: 10px; background: #0f172a;">
+                                <div class="phone-msg-bubble">System ready. Awaiting check-in SMS...</div>
+                            </div>
+                            
+                            <!-- Survey Form (Free-text SMS input) -->
+                            <div class="survey-form" id="survey-form" style="display:none; padding: 12px; background: #0f172a; border-top: 1px solid #1e293b;">
+                                <div style="display: flex; gap: 8px; align-items: flex-end;">
+                                    <textarea id="phone-sms-input" placeholder="Type SMS response..." style="flex-grow: 1; height: 42px; border-radius: 18px; border: 1px solid #334155; padding: 10px 14px; font-size: 0.82rem; font-family: inherit; resize: none; box-sizing: border-box; outline: none; background: #1e293b; color: #f8fafc; line-height: 1.4;" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitPhoneSms();}"></textarea>
+                                    <button class="btn btn-primary" id="btn-submit-phone" onclick="submitPhoneSms()" style="border-radius: 50%; width: 36px; height: 36px; min-width: 36px; padding: 0; display: flex; align-items: center; justify-content: center; background: #10b981; border-color: #10b981; cursor: pointer; margin-bottom: 3px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: none;">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" style="transform: translate(1px, -1px);"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Score Result Container (restored) -->
+                            <div id="score-result" style="display:none; padding: 12px; background: #0f172a; border-top: 1px solid #1e293b;"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PORTAL COMMAND / CONTROL BUTTONS -->
+                <section class="card" style="padding: 16px;">
+                    <h3 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 12px;">Reset Session</h3>
+                    <button class="btn btn-ghost" style="width:100%; justify-content:center; border-color:var(--danger); color:var(--danger);" onclick="resetSession()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><polyline points="3 3 3 8 8 8"/></svg>
+                        Enroll New Patient Profile
+                    </button>
+                </section>
+            </div>
+        </div>
+
+        <!-- REAL-TIME AUDIT LOG ACTIVITY STREAM -->
+        <div id="audit-log-container" style="display:none; margin-top:24px;">
+            <section class="card audit-card" id="audit-card">
+                <div class="card-header">
+                    <h3>Electronic Health Record Audit & SMS Log Stream</h3>
+                    <div class="audit-controls" style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+                        <div>
+                            <span class="audit-count" id="event-count">0 entries</span>
+                            <button class="btn btn-ghost btn-sm" onclick="clearEvents()">Clear Logs</button>
+                        </div>
+                        <div style="display:flex; gap:4px; background:rgba(0,0,0,0.2); padding:4px; border-radius:6px;">
+                            <button class="btn btn-sm" id="tab-all" onclick="filterEvents('ALL')" style="background:var(--accent); color:white; border:none;">All Events</button>
+                            <button class="btn btn-sm" id="tab-alerts" onclick="filterEvents('ALERT')" style="background:transparent; color:var(--text-secondary); border:none;">Alerts Only</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="audit-log" id="event-log">
+                    <div class="audit-empty">Awaiting orchestration logs...</div>
+                </div>
+            </section>
+        </div>
+
+        <!-- SYSTEM ARCHITECTURE EXPLAINER -->
+        <section class="arch-section" id="explainer-section">
+            <button class="arch-toggle" onclick="toggleArchSection()">
+                <h3>Under the Hood: Temporal Orchestration Patterns</h3>
+                <span class="arch-arrow" id="arch-arrow">▼</span>
+            </button>
+            <div class="arch-grid" id="explainer-grid" style="display:none;">
+                <div class="arch-card" onclick="toggleCard(this)">
+                    <div class="arch-card-header"><span>👨‍👩‍👧</span><h4>Parent-Child Workflows</h4></div>
+                    <div class="arch-card-body"><p><strong>PatientJourneyWorkflow</strong> (parent) runs durable timers for 90 days. For each scheduled check-in, it executes a <strong>CheckInWorkflow</strong> (child), keeping histories short, clean, and isolated.</p></div>
+                </div>
+                <div class="arch-card" onclick="toggleCard(this)">
+                    <div class="arch-card-header"><span>⏰</span><h4>Durable Timers</h4></div>
+                    <div class="arch-card-body"><p>Timer states are fully persisted in the Temporal database rather than keeping threads active. Timers resume flawlessly even if the cluster or workers crash.</p></div>
+                </div>
+                <div class="arch-card" onclick="toggleCard(this)">
+                    <div class="arch-card-header"><span>📨</span><h4>Durable Signals &amp; Races</h4></div>
+                    <div class="arch-card-body"><p>We employ a <code>wait_condition</code> signal race with a timer deadline. Whichever wakes the workflow first decides the outcome, avoiding stale states.</p></div>
+                </div>
+                <div class="arch-card" onclick="toggleCard(this)">
+                    <div class="arch-card-header"><span>🔒</span><h4>Activity Isolation</h4></div>
+                    <div class="arch-card-body"><p>Workflows are completely pure and deterministic. Side effects (sending automated Emails, calling EHR FHIR REST APIs, scoring symptoms) are strictly contained inside isolated activities.</p>
+                    <p>Activities implement robust exponential retries on failure.</p></div>
+                </div>
+                <div class="arch-card" onclick="toggleCard(this)">
+                    <div class="arch-card-header"><span>🔄</span><h4>Deterministic Replay</h4></div>
+                    <div class="arch-card-body"><p>Workflows are replayed by Temporal to recreate the current execution state. We guarantee exact deterministic execution by avoiding random values or raw system times inside the workflow code.</p></div>
+                </div>
+                <div class="arch-card" onclick="toggleCard(this)">
+                    <div class="arch-card-header"><span>🔁</span><h4>Transactional Consistency</h4></div>
+                    <div class="arch-card-body"><p>Patient monitoring logs are transactional. Failure to submit outcomes is handled automatically via Temporal's queue persistence, ensuring no patient's data is lost or un-logged.</p></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- TOAST CONTAINER FOR ALERTS -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- CODE IMPORTS -->
+    <script src="js/debug.js?v=4"></script>
+    <script src="js/timeline.js?v=4"></script>
+    <script src="js/eventlog.js?v=4"></script>
+    <script src="js/explainer.js?v=4"></script>
+    <script src="js/app.js?v=4"></script>
+    
+    <script>
+        // Initialization handled in app.js
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof renderActivePatients === 'function') {
+                renderActivePatients();
+            }
+            if (typeof showSection === 'function') {
+                showSection('enroll');
+            }
+        });
+    </script>
+</body>
+</html>
+
